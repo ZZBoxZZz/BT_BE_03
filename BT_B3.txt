@@ -1,0 +1,75 @@
+CREATE TABLE food(
+
+ food_id INT PRIMARY KEY AUTO_INCREMENT,
+ food_name VARCHAR(255) NULL,
+ image VARCHAR(255) NULL,
+ price INT NULL,
+ descr VARCHAR(255) NULL,
+ type_id INT NULL,
+ FOREIGN KEY (type_id) REFERENCES food_type(type_id) )
+
+CREATE TABLE rate_res(
+ user_id INT,
+ res_id INT,
+ amount INT NULL,
+ date_rate datetime NULL,
+ PRIMARY KEY(user_id, res_id)
+)
+
+CREATE TABLE like_res(
+ user_id INT,
+ res_id INT,
+ date_like datetime NULL,
+ PRIMARY KEY(user_id, res_id)
+)
+CREATE TABLE sub_food( 
+
+ sub_id INT AUTO_INCREMENT,
+ sub_name VARCHAR(255) NULL,
+ sub_price INT NULL,
+ food_id INT NULL,
+ PRIMARY KEY (sub_id),
+ FOREIGN KEY (food_id) REFERENCES food(food_id))
+
+CREATE TABLE user (
+
+ user_id INT AUTO_INCREMENT,
+ full_name VARCHAR(255) NULL,
+ email VARCHAR(255) NULL,
+ pass_word VARCHAR(255) NULL,
+ PRIMARY KEY( user_id) )
+
+CREATE TABLE orders (
+ user_id INT NOT NULL,
+ food_id INT NOT NULL,
+ amount INT NULL,
+ code VARCHAR(255) NULL,
+ arr_sub_id VARCHAR(255) NULL,
+
+ PRIMARY KEY (user_id, food_id),
+ FOREIGN KEY (user_id) REFERENCES user(user_id),
+ FOREIGN KEY (food_id) REFERENCES food(food_id))
+
+CREATE TABLE restaurant (
+  res_id int NOT NULL AUTO_INCREMENT,
+  res_name varchar(255) NULL,
+  image varchar(255) NULL,
+  desc varchar(255) NULL,
+  PRIMARY KEY (res_id)
+)
+CREATE TABLE food_type (
+  type_id int NOT NULL AUTO_INCREMENT,
+  type_name varchar(255) NULL,
+  PRIMARY KEY (type_id))
+
+INSERT INTO food VALUES (0,'hủ tiếu', 'hình hủ tiếu', 50,'mô tả',1),
+(0,'bún bò', 'hình bún bò', 50,'mô tả',1),
+(0,'khoai tây chiên', 'hình khoai tây', 50,'mô tả',2),
+(0,'humbeger', 'hình humbeger', 50,'mô tả',2),
+(0,'kem', 'hình kem', 50,'mô tả',2)
+
+select * from user, rate_res where user.user_id = rate_res.user_id  ORDER BY user.user_id desc limit 5
+select * from restaurant, rate_res where restaurant.res_id = rate_res.res_id  ORDER BY rate_res.amount desc limit 2
+select * from user, orders where user.user_id = orders.user_id  ORDER BY orders.amount desc
+select * from user, orders where user.user_id = orders.user_id and orders.amount = 0
+select avg(sub_price) from sub_food where sub_id =1
